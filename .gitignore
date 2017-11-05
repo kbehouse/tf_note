@@ -1,4 +1,5 @@
 tensorboard/
+DeepRL-Agents/train_0/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
