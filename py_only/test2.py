@@ -12,10 +12,12 @@ q = tf.FIFOQueue(capacity=3, dtypes=tf.float32)
 x_input_data = tf.Print(x_input_data, data=[x_input_data], message="Raw inputs data generated:", summarize=6)
 enqueue_op = q.enqueue_many(x_input_data)
 
+# enqueue_op = tf.Print(enqueue_op, data=[q.size(), enqueue_op], message="enqueue_op:")
+
 # To leverage multi-threading we create a "QueueRunner"
 # that will handle the "enqueue_op" outside of the main thread
 # We don't need much parallelism here, so we will use only 1 thread
-numberOfThreads = 2 
+numberOfThreads = 1 # try 1 or 2
 qr = tf.train.QueueRunner(q, [enqueue_op] * numberOfThreads)
 # Don't forget to add your "QueueRunner" to the QUEUE_RUNNERS collection
 tf.train.add_queue_runner(qr) 
@@ -40,6 +42,7 @@ with tf.Session() as sess:
     # The QueueRunner will automatically call the enqueue operation
     # asynchronously in its own thread ensuring that the queue is always full
     # No more hanging for the main process, no more waiting for the GPU
+    # print sess.run(enqueue_op)
     print sess.run(y)
     print sess.run(y) 
     print sess.run(y)
